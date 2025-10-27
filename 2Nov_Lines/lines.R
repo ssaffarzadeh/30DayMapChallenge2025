@@ -6,21 +6,16 @@ library(grid)
 
 rbanism_logo <- image_read('https://rbanism.org/assets/imgs/about/vi_l.jpg')
 
-
 # Data from: https://doi.org/10.5281/zenodo.11196161
 # Datapaper: https://journals.openedition.org/cybergeo/41791
 
-postal_roads <- st_read("data/Post_Roads.gpkg")
+roads1810 <- read.csv("data/roads_1810.csv")
 relays1810 <- read.csv("data/relays_1810.csv")
 
-
-st_crs(postal_roads)
-str(relays1810)
 relays <- st_as_sf(relays1810, 
                    coords = c("COORDINATES_2154_X", "COORDINATES_2154_Y"))
 st_crs(relays) <- st_crs(postal_roads)
 
-roads1810 <- read.csv("data/roads_1810.csv")
 
 xyrelays_A <- relays1810 |> 
   mutate(IDREL_A = IDREL,
@@ -34,16 +29,17 @@ xyrelays_B <- relays1810 |>
          COORDINATES_2154_Y_B = COORDINATES_2154_Y) |>
   select(IDREL_B, COORDINATES_2154_X_B,COORDINATES_2154_Y_B)
 
-
 roads <- roads1810 |>
   left_join(xyrelays_A, by="IDREL_A") |>
   left_join(xyrelays_B, by="IDREL_B" ) 
   
+
+
+############## Bit of code adapted from
 #https://www.adventuremeng.com/post/create-sf-lines-from-start-and-end-coordinates/
 library(sp)
 
 ###The table above is imported as "od" here.
-
 
 od_coords_to_sf <- function(df) {
   #prepare the table from wide to long
@@ -76,6 +72,8 @@ for (i in 1:nrow(roads)){
 }
 
 plot(all_segment)
+
+#####################
 
 all_roads <- left_join(all_segment,roads)
 
