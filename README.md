@@ -43,6 +43,9 @@ See our examples [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/ma
 ### Our logo
 ![](https://rbanism.org/assets/imgs/about/vi_l.jpg)
 
+You can also find the logo files here:  
+[Rbanism 30DayMapChallenge 2025 — Logo folder](https://github.com/Rbanism/30DayMapChallenge2025/tree/main/resources/logo)
+
 ### Our colour Hex codes
 Purple: `#93278F`
 Teal: `#00A99D`
