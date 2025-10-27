@@ -6,17 +6,6 @@ The [#30DayMapChallenge](https://30daymapchallenge.com/) is an event which gathe
 
 This year again, we participate as a group to the #30DayMapChallenge. Given the focus of the Rbanism community on the programming language R, we create each map with R.
 
-## Resources
-- [Geospatial Data Carpentry for Urbanism](https://carpentries-incubator.github.io/r-geospatial-urban/) provides a comprehensive guide on how you can work with raster and vector data in R.
-
-### Our logo
-![](https://rbanism.org/assets/imgs/about/vi_l.jpg)
-
-### Our colour Hex codes
-Purple: `#93278F`
-Teal: `#00A99D`
-Orange: `#F7931E`
-
 
 ## Guidelines for submission
 1. Create the map you were assigned for, which contains a map made with R, a title (on the format “*challengedate_challengetopic: subtitle”), a mention of the credits (with data source, mapper's name, #30DayMapChallenge) and the Rbanism logo whenever possible.
@@ -34,6 +23,17 @@ On BlueSky
 On Instagram
 - [@Rbanism_](https://www.instagram.com/rbanism_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==)
 
+
+## Resources
+- [Geospatial Data Carpentry for Urbanism](https://carpentries-incubator.github.io/r-geospatial-urban/) provides a comprehensive guide on how you can work with raster and vector data in R.
+
+### Our logo
+![](https://rbanism.org/assets/imgs/about/vi_l.jpg)
+
+### Our colour Hex codes
+Purple: `#93278F`
+Teal: `#00A99D`
+Orange: `#F7931E`
 
 # Any questions or ideas?
 
