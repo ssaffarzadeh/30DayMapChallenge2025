@@ -26,6 +26,7 @@ On Instagram
 
 ## Resources
 - [Geospatial Data Carpentry for Urbanism](https://carpentries-incubator.github.io/r-geospatial-urban/) provides a comprehensive guide on how you can work with raster and vector data in R.
+- Refactoring session: Thursday, 27th of November 2025, 12:30-14:30 (TUD Library, Blue Room) 
 
 ### Our logo
 ![](https://rbanism.org/assets/imgs/about/vi_l.jpg)
@@ -36,5 +37,4 @@ Teal: `#00A99D`
 Orange: `#F7931E`
 
 # Any questions or ideas?
-
 If there any ideas, questions, or uncertainties regarding the challenge, please don’t hesitate to reach out to us via [rbanism@tudelft.nl](mailto:rbanism@tudelft.nl) !
