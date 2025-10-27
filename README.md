@@ -38,7 +38,7 @@ See our examples [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/ma
 ## Resources
 - [Geospatial Data Carpentry for Urbanism](https://carpentries-incubator.github.io/r-geospatial-urban/) provides a comprehensive guide on how you can work with raster and vector data in R.
 - **Refactoring session**:** Thursday, 27th of November 2025**, 12:30-14:30 (TUD Library, Blue Room). Register **[here](https://www.eventbrite.nl/e/nice-and-clean-refactoring-code-from-the-30daymapchallenge-tickets-1760050531519?aff=oddtdtcreator)**
-- Miro board for providing **(map peer-review)[https://miro.com/app/board/uXjVJ0UihFo=/]**
+- Miro board for providing **[map peer-review](https://miro.com/app/board/uXjVJ0UihFo=/)**
 
 ### Our logo
 ![](https://rbanism.org/assets/imgs/about/vi_l.jpg)
