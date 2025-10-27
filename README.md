@@ -18,7 +18,7 @@ This year again, we participate as a group to the #30DayMapChallenge. Given the 
     3) **PNG of the map**, and
     4) **<200 words describing the content of the map** & **<200 words describing the process and what you learned**.
 
-See our examples [here](https://github.com/Rbanism/30DayMapChallenge2025/tree/main/2Nov_Lines).
+See an example [here](https://github.com/Rbanism/30DayMapChallenge2025/tree/main/2Nov_Lines).
 
 3. **Send the zipped folder to [rbanism@tudelft.nl](mailto:rbanism@tudelft.nl)** or 2) **send a Pull Request on [GitHub](https://github.com/Rbanism/30DayMapChallenge2024)** *at least one day before the date of your topic.*
 
