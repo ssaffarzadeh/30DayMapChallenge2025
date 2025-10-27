@@ -5,6 +5,7 @@ The [#30DayMapChallenge](https://30daymapchallenge.com/) is an event which gathe
 <img src="https://github.com/user-attachments/assets/d5886338-39d6-4fd2-abbe-91f239370682" alt="image" width="960" height="540"/>
 
 This year again, we participate as a group to the #30DayMapChallenge. Given the focus of the Rbanism community on the programming language R, we create each map with R.
+You can fill in the maps you'd like to work with in the table [here](https://tud365.sharepoint.com/:x:/r/sites/Rbanism/_layouts/15/Doc.aspx?sourcedoc=%7B530836AF-8F16-4A31-89EE-EB1525C60B37%7D&file=30DayMapChallenge2025_divisionOfTasks.xlsx&action=default&mobileredirect=true)
 
 ## Guidelines for submission
 1. Create the **map** you were assigned for, which contains:
