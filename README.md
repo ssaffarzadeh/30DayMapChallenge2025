@@ -15,7 +15,7 @@ This year again, we participate as a group to the #30DayMapChallenge. Given the 
 
 See an example [here](https://github.com/Rbanism/30DayMapChallenge2025/blob/main/2Nov_Lines/Lines_Map.png).
 
-3. Create a **folder** whose title is “*challengedate_challengetopic”,* containing:
+2. Create a **folder** whose title is “*challengedate_challengetopic”,* containing:
     1) **the data whenever possible** (as small as possible),
     2) **R code**,
     3) **PNG of the map**, and
