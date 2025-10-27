@@ -8,9 +8,20 @@ This year again, we participate as a group to the #30DayMapChallenge. Given the 
 
 
 ## Guidelines for submission
-1. Create the **map** you were assigned for, which contains 1) **a map made with R**, 2) **a title** (on the format “*challengedate_challengetopic: subtitle”), 3) **a mention of the credits** (with data source, mapper's name, #30DayMapChallenge) and 4) **the Rbanism logo** whenever possible.
-2. Create a **folder** whose title is “*challengedate_challengetopic”,* containing: 1) **the data whenever possible** (as small as possible) 2) **R code** 3) **PNG of the map** 4) **<200 words describing the content of the map** & **<200 words describing the process and what you learned**. See our examples [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/main/8Nov_HDX) and [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/main/15Nov_MyData).
-3. **Send the zipped folder to [rbanism@tudelft.nl](mailto:rbanism@tudelft.nl)** or 2) **send a Pull Request on [GitHub](https://github.com/Rbanism/30DayMapChallenge2024)** *at least one day before the date of your topic.*
+1. Create the **map** you were assigned for, which contains:
+    1) **a map made with R**,
+    2) **a title** (on the format “*challengedate_challengetopic: subtitle”),
+    3) **a mention of the credits** (with data source, mapper's name, #30DayMapChallenge) and
+    4) **the Rbanism logo** whenever possible.
+3. Create a **folder** whose title is “*challengedate_challengetopic”,* containing:
+    1) **the data whenever possible** (as small as possible),
+    2) **R code**,
+    3) **PNG of the map**, and
+    4) **<200 words describing the content of the map** & **<200 words describing the process and what you learned**.
+
+See our examples [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/main/8Nov_HDX) and [here](https://github.com/Rbanism/30DayMapChallenge2024/tree/main/15Nov_MyData).
+
+5. **Send the zipped folder to [rbanism@tudelft.nl](mailto:rbanism@tudelft.nl)** or 2) **send a Pull Request on [GitHub](https://github.com/Rbanism/30DayMapChallenge2024)** *at least one day before the date of your topic.*
 
 **If you want your author credits to be shared on our social media, please share your instagram/BlueSky handle with the submission! If via email, simply add it to the mail, if via GitHub, please add a .txt file within the folder.*
 
