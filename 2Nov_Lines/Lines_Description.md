@@ -1,4 +1,4 @@
-Day 2 - Lines. Postal horse roads in 1810 France
+Day 2 - Lines: Horses, beware! Postal horse roads in 1810 France
 By Clémentine Cottineau-Mugadza
 
 **Content Description**

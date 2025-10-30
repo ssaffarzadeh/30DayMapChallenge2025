@@ -71,7 +71,6 @@ for (i in 1:nrow(roads)){
   all_segment <- rbind(all_segment, one_seg)
 }
 
-plot(all_segment)
 
 #####################
 
@@ -82,15 +81,12 @@ fr <- st_read("2Nov_Lines/data/fr.json") |>
 
 fr_lambert <- st_transform(fr, crs = 2154)
 
-
-logo_grob <- rasterGrob(rbanism_logo, x = 652023, y = 6862643, width = 200, height = 2, just = c("right", "top"))
-
 ggplot() +
   geom_sf(data=fr, fill = alpha("#F7931E", 0.99), col = NA) +
   geom_sf(data = all_roads, aes(col = MAX_SLOPE), linewidth = 0.5) +
   scale_colour_gradient(high="#11686C", low = "white") +
   theme_minimal() +
-  ggtitle("2 November: Lines.\nPostal horse roads in 1810 France") +
+  ggtitle("2 November: Lines. Horses, beware!\nPostal horse roads in 1810 France") +
   xlab(str_wrap("#30DayMapChallenge. Clémentine Cottineau-Mugadza, 2025. Source: Verdier, N., Giraud, T., Mimeur, C., & Bretagnolle, A. (2024). Postal horse relays and roads in France, from the 17th to the 19th centuries.Zenodo. https://doi.org/10.5281/zenodo.11196161")) +
   coord_sf(crs = sf::st_crs(2154)) +
   guides(col=guide_legend(title="Maximum slope (m)"), legend.position="bottom") +
