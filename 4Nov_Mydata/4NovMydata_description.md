@@ -1,6 +1,7 @@
 # Day 4: My Data
 
 Cycling into the “Highlands” of the Netherlands: Veluwezoom (already too high for me!)
+by Yehan Wu
 
 ## Content Description
 
