@@ -9,7 +9,7 @@ This map shows a recent cycling tour I took in National Park Veluwezoom. Because
 
 ## Process Description
 
-Regarding the speed and route, I processed the original GPX file recorded on my Apple Watch and converted it to a GPKG. Speed classes were created using quantile breaks. To show the order and direction of the ride, I selected 5 track points and labelled them 1–5. It was a new experience for me to arrange all elements on top of the DTM and to adjust their placement for clarity.
+Regarding the speed and route, I processed the original GPX file recorded on my Apple Watch. The original file included tracking points (every one second), tracking route, and I converted them to different layers in the tracking.gpkg. To show the order and direction of the ride, I selected 5 track points and labelled them 1–5. Speed classes were created using quantile breaks. It was a new experience for me to arrange all elements on top of the DTM and to adjust their placement for clarity.
 
 ## Data Sources
 
