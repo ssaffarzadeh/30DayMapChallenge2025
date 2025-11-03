@@ -1,0 +1,458 @@
+---
+title: "03_Nov_Polygons"
+author: "Daniele Cannatella"
+date: "2025-11-03"
+format: 
+  html: default
+pdf: default
+editor: visual
+---
+
+## Import and install Libraries - 
+
+```{r packages}
+
+# Define the packages to be used
+packages <- c(
+  "ggplot2", "dplyr", "sf", "readr", "tidyr",
+  "showtext", "here", "stringr", "grid",
+  "magick", "ggspatial", "cowplot", "ggpattern", "showtext"
+)
+
+# Function to check if packages are installed and load them
+load_packages <- function(pkgs) {
+  # Check for missing packages
+  missing_pkgs <- pkgs[!(pkgs %in% installed.packages()[, "Package"])]
+  
+  # Install missing packages
+  if (length(missing_pkgs)) {
+    install.packages(missing_pkgs)
+  }
+  
+  # Load all packages
+  lapply(pkgs, library, character.only = TRUE)
+}
+
+# Load the packages
+load_packages(packages)
+
+# Print a message to confirm successful loading
+cat("All specified packages have been loaded successfully!\n")
+```
+
+## Import Layers
+
+### Import Building Points
+
+```{r}
+points <- st_read("3Nov_Polygons/3Nov_Polygons/data/UNOSAT_GazaStrip_CDA_October2025.gpkg")
+
+
+```
+
+### Import Attribute Table
+
+```{r}
+csv_path <- "3Nov_Polygons/3Nov_Polygons/data/UNOSAT_GazaStrip_CDA_11October2025_table.csv"
+
+points_t <- read.csv(csv_path)
+
+names(points_t)
+
+points_t <- points_t[, c(2,62:74)]
+
+head(points_t)
+
+unique(points_t$Main_Damage_Site_Class_13)
+unique(points_t$Damage_Status_13)
+
+points_t <- points_t[, c("OBJECTID","Main_Damage_Site_Class_13", "Damage_Status_13")]
+```
+
+### Join Points with Points_table
+
+```{r}
+
+names(points)
+points_sf <- points [, c(1)]
+
+points_sf <- points_sf %>%
+  left_join(points_t, by = "OBJECTID")
+
+points_sf <- st_transform(points_sf, 28191)
+
+head(points_sf)
+```
+
+### Import Other layers
+
+```{r}
+# Import blocks
+blocks <- st_read("3Nov_Polygons/data/gaza-geojson-main/blocks/dash_population_blocks.geojson")
+
+# Transform CRS to match the points
+blocks <- st_transform(blocks, st_crs(points_sf))
+
+# Import buildings from OSM
+buildings <- st_read("3Nov_Polygons/data/israel-and-palestine-251008-free.shp/gis_osm_buildings_a_free_1.shp")
+
+# Transform CRS to match the points
+buildings <- st_transform(buildings, st_crs(points_sf))
+
+# intersect points and square with st_intersection
+buildings <- st_intersection(buildings, blocks)
+```
+
+```{r}
+# Import Boundaries and features
+st_layers("3Nov_Polygons/data/gaza.gpkg")
+
+p_land <- st_read("3Nov_Polygons/data/gaza.gpkg", layer = "land")
+p_water <- st_read("3Nov_Polygons/data/gaza.gpkg", layer = "water")
+p_extent <- st_read("3Nov_Polygons/data/gaza.gpkg", layer = "extent")
+```
+
+### Create an ordered factor for Main Damage
+
+```{r}
+
+points_sf <- points_sf %>%
+  mutate(
+    Main_Damage_Site_Class_13 = factor(
+      Main_Damage_Site_Class_13,
+      levels = c(
+        "No visible damage",
+        "Possible damage from adjacent impact, debris",
+        "Possibly damaged",
+        "Moderately damaged",
+        "Severely damaged",
+        "Destroyed"
+      ),
+      ordered = TRUE
+    ),
+    # Map ordered factor to a numeric scale for gradient
+    damage_numeric = as.numeric(Main_Damage_Site_Class_13)
+  )
+
+# 3 Plot without outlines and with a gradient fill
+ggplot(points_sf) +
+  geom_sf(aes(color = damage_numeric), size = 0.3, alpha = 0.8, show.legend = TRUE) +
+  scale_color_gradient(
+    low = "yellow",
+    high = "red",
+    name = "Damage Severity",
+    breaks = 1:6,
+    labels = levels(points_sf$Main_Damage_Site_Class_13)
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  labs(
+    title = "Main Damage Site Classification – Gaza Strip (Oct 2025)",
+    caption = "Source: UNOSAT Damage Assessment"
+  )
+
+```
+
+```{r}
+p_boundaries <- st_union(blocks)
+
+p_boundaries <- st_buffer(p_boundaries, 500)
+
+p_boundaries <- st_buffer(p_boundaries, -500)
+
+plot(p_boundaries)
+```
+
+```{r}
+# Create subsets of points containing only destroyed and severely damaged buildings
+points_dd <- points_sf %>%
+  filter(Main_Damage_Site_Class_13 %in% c("Destroyed", "Severely damaged"))
+
+points_ndd <- points_sf %>%
+  filter(!Main_Damage_Site_Class_13 %in% c("Destroyed", "Severely damaged"))
+```
+
+## Count buildings per block
+
+```{r}
+# Count destroyed buildings per block
+blocks_bdd <- st_join(blocks, points_dd) %>%
+  group_by(Name) %>%
+  summarise(destroyed_n = n())
+```
+
+```{r}
+buildings_dd <- st_intersects(buildings, points_dd)
+
+buildings_dd_l <- lengths(buildings_dd) > 0
+
+buildings_ndd <- buildings[!buildings_dd_l, ]
+buildings_dd <- buildings[buildings_dd_l, ]
+
+nrow(buildings) == (nrow(buildings_dd) + nrow(buildings_ndd)) # should return TRUE
+```
+
+### Plot buildings
+
+```{r}
+ggplot() +
+  geom_sf(3Nov_Polygons/data = buildings_ndd, fill = "grey80", color = "white", color = NULL) +
+  geom_sf(3Nov_Polygons/data = buildings_dd, fill = "red", color = NA, alpha = 0.6, color = NULL) +
+  # geom_sf(3Nov_Polygons/data = points_sf, color = "black", size = 0.5) +
+  theme_void()
+```
+
+```{r}
+# Plot destroyed/damaged building per block
+ggplot() +
+  geom_sf(data = blocks_bdd, aes(fill = destroyed_n, color = NULL), size = 0.2) +
+  scale_fill_viridis_b()+
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    panel.grid.major = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  labs(
+    title = "Buildings destroyed or severely damaged per block in Gaza",
+    caption = "Source: UNOSAT Damage Assessment"
+  )
+```
+
+```{r}
+ev_bound_1 <- st_read("3Nov_Polygons/data/gaza-geojson-main/blocks/evac-orders-dec2.geojson")
+ev_bound_2 <- st_read("3Nov_Polygons/data/gaza-geojson-main/blocks/evac-orders-dec4.geojson")
+ev_bound_3 <- st_read("3Nov_Polygons/data/gaza-geojson-main/blocks/evac-orders-dec5.geojson")
+
+# Transform CRS to match the points
+ev_bound_1 <- st_transform(ev_bound_1, st_crs(points_sf))
+ev_bound_2 <- st_transform(ev_bound_2, st_crs(points_sf))
+ev_bound_3 <- st_transform(ev_bound_3, st_crs(points_sf))
+
+ev_all <- st_union(rbind(ev_bound_1, ev_bound_2, ev_bound_3))
+
+ev_all <- st_buffer(ev_all, 500)
+ev_all <- st_buffer(ev_all, -500)
+
+plot(ev_all)
+```
+
+```{r}
+library(classInt)  # provides multiple classification methods
+library(dplyr)
+
+values <- blocks_bdd$destroyed_n
+
+# Equal interval
+breaks_equal <- classIntervals(values, n = 7, style = "equal")$brks
+
+# Quantile (quartiles or any number of quantiles)
+breaks_quantile <- classIntervals(values, n = 4, style = "quantile")$brks  # quartiles
+
+# Jenks natural breaks (optimized clustering)
+breaks_jenks <- classIntervals(values, n = 7, style = "jenks")$brks
+
+# Logarithmic breaks (for skewed 3Nov_Polygons/data)
+breaks_log <- exp(seq(log(min(values[values > 0], na.rm = TRUE)),
+                      log(max(values, na.rm = TRUE)), length.out = 7))
+
+```
+
+## Plot map
+
+### Import Fonts
+
+```{r}
+# Add the font from Google Fonts
+font_add_google("Source Sans Pro", "sourcesanspro")
+
+# Automatically use showtext in plots
+showtext_auto()
+
+# Then run your ggplot code using family = "sourcesanspro"
+
+```
+
+### Import Logo
+
+```{r}
+# Download Rbanism logo
+rbanism_logo <- image_read("3Nov_Polygons/images/Logo_Rbanism_ White.png")
+
+logo_grob <- rasterGrob(rbanism_logo, interpolate = TRUE)
+```
+
+```{r}
+rbanism_logo2 <- image_read('https://rbanism.org/assets/imgs/about/vi_l.jpg')
+```
+
+```{r}
+get_png <- function(filename) {
+  grid::rasterGrob(png::readPNG(filename), interpolate = TRUE)
+}
+
+l <- get_png("3Nov_Polygons/images/Logo_Rbanism_ White.png")
+```
+
+### Define breaks and plot the map
+
+```{r}
+
+# Define your custom red color palette
+red_palette <- c("#fde0c5","#facba6","#f8b58b","#f59e72","#f2855d","#ef6a4c","#eb4a40")
+
+brown_palette <- c("#ede5cf","#e0c2a2","#d39c83","#c1766f","#a65461","#813753","#541f3f")
+
+# Define breaks for classes (adjust as needed)
+breaks <- breaks_jenks
+labels <- paste0(
+  round(breaks[-length(breaks)], 0), "–", round(breaks[-1], 0)
+)
+
+# Create a categorical variable based on breaks
+blocks_bdd <- blocks_bdd %>%
+  mutate(
+    destroyed_class = cut(destroyed_n, breaks = breaks, labels = labels, include.lowest = TRUE)
+  )
+
+# Plot
+polygonmap <- ggplot(blocks_bdd) +
+
+  # Extent and land
+  geom_sf(data = p_land, fill = "black", color = NA, size = 0.2) +
+  
+  geom_sf_pattern(
+    data = p_water,
+    fill = NA,
+    # alpha = 0.2,
+    pattern = "circle",
+    pattern_fill = "white",
+    pattern_alpha = 1,
+    pattern_spacing = 0.005,
+    pattern_size = 0.01,
+    color = NA
+  ) +
+  
+    geom_sf(data = p_extent, fill = NA, color = "white", size = 0.2) +
+  
+  # Gaza boundaries
+  # geom_sf(3Nov_Polygons/data = p_boundaries, fill = NA, color = "white", size = 0.2) +
+  
+  # Blocks by class
+  geom_sf(aes(fill = destroyed_class), color = NA, size = 0.1) +
+  scale_fill_manual(
+    values = brown_palette,
+    name = "n. of buildings"
+    # name = "number of Destroyed / Severely Damaged buildings"
+  ) +
+  
+  # Evacuation zones
+    geom_sf(
+    data = ev_all,
+    aes(color = "Evacuation Zones", linetype = "Evacuation Zones"),  # dotted + legend
+    fill = NA,
+    linewidth = 0.4
+  ) +
+  scale_color_manual(
+    name = NULL,
+    values = c("Evacuation Zones" = "white")
+  ) +
+  scale_linetype_manual(
+    name = NULL,
+    values = c("Evacuation Zones" = "dashed")
+  ) +
+
+  # Layout
+  coord_sf(datum = NA, expand = TRUE, clip = "on") +
+  theme_void() +
+  theme(
+    
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    
+    # Plot title and caption
+    plot.title = element_text(
+      hjust = 0.1,
+      vjust = -60,
+      size = 75, face = "bold",
+      color = "white", family = "sourcesanspro"
+    ),
+    plot.subtitle = element_text(
+      hjust = 0.1,
+      vjust = -50,
+      size = 30,
+      color = "white", family = "sourcesanspro"
+    ),
+    plot.caption = element_text(
+      hjust = 0.9,
+      vjust = 12,
+      size = 30,
+      color = "white", family = "sourcesanspro"
+    ),
+    plot.background = element_rect(fill = "black", color = NA),
+    legend.position = c(0.95, 0.25),  # x=0.92 (right), y=0.1 (bottom)
+    legend.key.height = unit(0.4, "cm"),
+    legend.key.width = unit(0.25, "cm"),
+    legend.key.spacing.y = unit(0.25, "cm"),
+    legend.title = element_text(
+      color = "white", family = "sourcesanspro", size = 30, face = "bold"
+    ),
+    legend.text = element_text(
+      color = "white", family = "sourcesanspro", size = 30
+    ),
+    
+    # legend.text.align = 0,       # aligns text to left
+    # legend.justification = "right"  # aligns keys to right within legend box
+  ) +
+  
+  # Legend order and style
+  guides(
+    fill = guide_legend(order = 1, reverse = TRUE),
+    color = guide_legend(
+      order = 2,
+      reverse = TRUE,
+      override.aes = list(
+        color = "white",  # ensure white color
+        linetype = "dashed",
+        linewidth = 0.5,
+        fill = NA
+      )
+    ),
+    linetype = "none"  # prevent duplicate linetype legend
+  ) +
+  
+  labs(
+    title = "Destruction patterns in Gaza",
+    subtitle = "Spatial distribution of destroyed and severely damaged buildings during recent attacks",
+    caption = "Author: Daniele Cannatella | 3Nov_Polygons/data source: UNOSAT Damage Assessment. October 2025"
+  )
+
+polygonmap
+```
+
+### Add logo ad export final map!
+
+```{r}
+
+# Combine plot and logo
+a <- cowplot::ggdraw(polygonmap) +
+  cowplot::draw_image(rbanism_logo, x = 0.075, y = 0.075, width = 0.1, height = 0.1, hjust = 0, vjust = 0)
+
+a
+```
+
+```{r}
+# Save the last ggplot to PNG
+ggsave(
+  filename = "3Nov_Polygons/3Nov_Polygons.png",  # output file name
+  plot = last_plot(),                     # the ggplot object to save
+  width = 12,                             # width in inches
+  height = 12,                            # height in inches
+  dpi = 300                                # resolution
+)
+
+```
