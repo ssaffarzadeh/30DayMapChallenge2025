@@ -4,7 +4,7 @@ Comparing Global and Local Digital Terrain Models by Claudiu Forgaci
 
 ## Content Description
 
-This map compares a recently released global Digital Terrain Model (DTM) with a spatial resolution of 1 arc-second (approximately 30 m) to a high-resolution 0.5 m DTM available for the Netherlands. The global dataset was produced using machine-learning–based data fusion, while the local DTM was created using a traditional interpolation method known as Inverse Distance Weighting (IDW).
+This map compares a recently released global Digital Terrain Model (DTM) with a spatial resolution of 1 arc-second (approximately 30 m) to a high-resolution 0.5 m DTM available for the Netherlands. The global dataset was produced using machine-learning–based data fusion, while the local DTM was created using an interpolation method known as Inverse Distance Weighting (IDW).
 
 My interest is in evaluating whether a global DTM—designed to represent the bare-earth surface without buildings or vegetation—can serve both as a more accurate alternative to widely used Digital Surface Models (DSM), which *do* include above-ground objects, and as a scalable input for analyses beyond the local level.
 
