@@ -12,7 +12,7 @@ However, comparing the two datasets reveals that the difference is not only abou
 
 ## Process Description
 
-While producing this map, I had to tackled a few challenges: acquiring the global DTM data from a STAC endpoint, combining two maps into one plot and adding the Rbanism logo. While the first and second challenges were resolved, the third remains a challenge :)
+While producing this map, I had to tackle a few challenges: acquiring the global DTM data from a STAC endpoint, combining two maps into one plot and adding the Rbanism logo. While the first and second challenges were resolved, the third remains a challenge :)
 
 ## Data Sources
 
