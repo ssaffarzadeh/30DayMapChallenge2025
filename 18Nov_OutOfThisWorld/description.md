@@ -1,6 +1,6 @@
 # Day 18: Out Of This World
 
-Render a 3D map of Olympus Mons on Mars using elevation data.
+Render a 3D map of Olympus Mons on Mars using elevation data by Ignacio Urria Yáñez.
 
 ## Content Description
 
