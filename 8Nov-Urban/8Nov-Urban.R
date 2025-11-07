@@ -90,12 +90,9 @@ p <- grid_gelderland_pu_joined_centroids |>
                      ", 2025. Data: EEA grid 1km and InPUT project data.")
   )
 
-
-
 # Save map ----
 out <- ggdraw() +
   draw_plot(p) +
   draw_image(rbanism_logo_path, x = 0.91, y = 0.25,
              width = 0.12, height = 0.12 * asp, hjust = 1, vjust = 1)
 ggsave("8Nov-Urban/Urban.png", out, width = 10, height = 8, dpi = 300)
-
