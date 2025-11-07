@@ -8,7 +8,7 @@ This map is our attempt to summarise a peri-urban condition characterised by a l
 
 ## Process Description
 
-The main challenge of this map was the combination of a large number of variables and choosing a
+The main challenge of this map was choosing a simple way to visualise a large number of variables. What started as a complex plan in which each grid cell would display a categorised value of each amenity, ended up as the simple count described above. While this is an effective way to summarise the diversity of amenities spatially, the process of producing this map inspired us to develop non-spatial visualisations that can provide more insight into the multiple dimensions of the periurban conditions investigated in the InPUT project.
 
 ## Data Sources
 
