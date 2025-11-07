@@ -44,6 +44,23 @@ osm_natural_water_grid <- osm_natural_water$osm_polygons |>
   st_transform(st_crs(grid_gelderland_base)) |> 
   st_intersection(st_union(grid_gelderland_base))
 
+osm_water_river <- opq(bbox = "Gelderland, The Netherlands") |>
+  add_osm_feature("water", "river") |>
+  osmdata_sf()
+
+osm_water_river_grid <- osm_water_river$osm_polygons |>
+  st_transform(st_crs(grid_gelderland_base)) |> 
+  st_intersection(st_union(grid_gelderland_base))
+
+osm_water_river_mp_grid <- osm_water_river$osm_multipolygons |>
+  st_make_valid() |> 
+  st_transform(st_crs(grid_gelderland_base)) |> 
+  st_intersection(st_union(grid_gelderland_base))
+
+osm_water_river_lines_grid <- osm_water_river$osm_lines |>
+  st_transform(st_crs(grid_gelderland_base)) |> 
+  st_intersection(st_union(grid_gelderland_base))
+
 ## Take top 25% and count how many of the categories are present in each
 ## cluster combination
 data_filtered <- data |>
@@ -65,6 +82,9 @@ grid_gelderland_pu_joined_centroids <- st_centroid(grid_gelderland_pu_joined)
 p <- grid_gelderland_pu_joined_centroids |> 
   ggplot() +
   geom_sf(data = osm_natural_water_grid, fill = "#0091ff", color = NA) +
+  geom_sf(data = osm_water_river_grid, fill = "#0091ff", color = NA) +
+  geom_sf(data = osm_water_river_mp_grid, fill = "#0091ff", color = NA) +
+  # geom_sf(data = osm_water_river_lines_grid, color = "#0091ff", linewidth = 0.1) +
   geom_sf(data = grid_gelderland_base, color = "grey", lwd = 0.1, fill = NA) +
   geom_sf(aes(size = count), shape = 15) +
   scale_size_continuous(range = c(1, 3), name = "Count of types\nof amenities",
@@ -84,11 +104,12 @@ p <- grid_gelderland_pu_joined_centroids |>
   ) + 
   labs(
     title = "Periurban Intensities",
-    subtitle = paste0("Diversity of Amenities in Peripheral",
+    subtitle = paste0("Diversity of Amenities in Peripheral ",
                       "Spatial-Demographic Types in Gelderland"),
     caption = paste0("#30DayMapChallenge. Birgit Hausleitner & Claudiu Forgaci",
                      ", 2025. Data: EEA grid 1km and InPUT project data.")
   )
+p
 
 # Save map ----
 out <- ggdraw() +
