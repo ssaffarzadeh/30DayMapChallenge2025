@@ -48,7 +48,7 @@ plot_ndvi <- function(df, caption) {
     theme(
       plot.caption = element_text(hjust = 0.5, size = 10, face = "bold.italic", margin = margin(t = 10, b = 20)),
       legend.position = "bottom",
-      legend.tit = element_text(size = 8),
+      legend.title = element_text(size = 8),
       plot.background = element_rect(fill = "#FFFDEB", color = NA)
     )
 }
