@@ -10,7 +10,7 @@ library(grid)
 # load the logo
 logo <- image_read("Logo_Blue.png")
 
-# define the unsupervised classification function
+# define the k-means clustering function
 unsupervised_classify <- function(
     img, n_classes = 5, iter_max = 100, n_start = 5, seed = 99){
   
@@ -43,7 +43,7 @@ new_df$R <- new_df$R / max(new_df$R, na.rm = TRUE)
 new_df$G <- new_df$G / max(new_df$G, na.rm = TRUE)
 new_df$B <- new_df$B / max(new_df$B, na.rm = TRUE)
 
-# apply the classification
+# apply the clustering
 result <- unsupervised_classify(new, n_classes = 7, iter_max = 250)
 r_class <- result$classified
 r_class_df <- as.data.frame(r_class, xy = TRUE, na.rm = TRUE)
@@ -72,7 +72,7 @@ p2 <- ggplot() +
   scale_fill_viridis_d(option = "viridis", direction = -1, name = "Cluster") +
   coord_equal() +
   labs(
-    caption = "Unsupervised K-means Classification (7 clusters)",
+    caption = "K-means Clustering (7 clusters)",
     x = NULL, y = NULL
   ) +
   theme_minimal() +
@@ -88,9 +88,9 @@ final_plot <- (
 ) +
   plot_annotation(
     title = "What's On a Port?",
-    subtitle = paste0("Port Pattern Recognition Using Unsupervised Classification\n",
+    subtitle = paste0("Port Pattern Recognition Using K-Means Clustering\n",
                       "with Example of Yangshan Port, Shanghai"),
-    caption = paste0("30DayMapChallenge, Yaying Hao, 2025.\n",
+    caption = paste0("#30DayMapChallenge, Yaying Hao, 2025.\n",
                      "Data: Copernicus Sentinel-2")
   ) &
   theme(
@@ -103,7 +103,14 @@ final_plot <- (
     plot.margin = unit(c(5,10,5,10), "pt")
   )
 
-final_plot
-grid.raster(logo, x = 0.1, y = 0.1, width = unit(50, "points"))
-
 ggsave("29Nov_raster.png", final_plot, width = 8, height = 12, dpi = 300)
+
+# Add logo
+map <- image_read("29Nov_raster.png")
+logo <- image_scale(logo, "200")
+final_with_logo <- image_composite(
+  map,
+  logo,
+  offset = "+30+3200"
+)
+image_write(final_with_logo, "29Nov_raster_with_logo.png")
