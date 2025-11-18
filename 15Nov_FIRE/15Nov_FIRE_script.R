@@ -57,8 +57,7 @@ for(i in 1:nrow(cities)){
 geocities <- cities_of_interest |>
   rename(City = name_of_city) |>
   left_join(cities) |>
-  st_as_sf() |>
-  st_transform(54024)
+  st_as_sf() 
 
 st_crs(geocities) <- st_crs(4326)
 geocities <- geocities |>
