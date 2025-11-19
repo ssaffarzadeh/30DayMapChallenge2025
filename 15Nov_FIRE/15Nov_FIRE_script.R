@@ -1,0 +1,104 @@
+library(sf)
+library(tidyverse)
+library(magick)
+library(magrittr)
+library(grid)
+library(readxl)
+library(osmdata)
+library(rnaturalearth)
+library(ggsflabel)
+
+
+
+### Logo
+rbanism_logo <- image_read('Logos/Logo transparent background/Logo_White.png')
+
+## World map
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+## City data
+# Data from: https://gawc.lboro.ac.uk/gawc-worlds/gawc-data/dataset-31/
+cities <- read_excel("15Nov_FIRE/data/da31_gnc2020.xlsx") |>
+  mutate(search = paste0(City, ", ", Country)) |>
+  rename(GNC_rel = `GNC_rel(%)`)
+
+head(cities)
+
+# Code from: https://stackoverflow.com/questions/74562812/how-to-get-coordinates-of-cities-from-openstreetmap-in-r
+city_coords_from_op_str_map <- function(city_name){
+  city_coordinates <- osmdata::getbb(city_name) %>% # Obtain the bounding box corners fro open street map
+    t() %>% # Transpond the returned matrix so that you get x and y coordinates in different columns
+    data.frame() %>% # The next function takes a data frame as input
+    sf::st_as_sf(coords = c("x", "y")) %>%  # Convert to simple feature
+    sf::st_bbox() %>% # get the bounding box of the corners
+    sf::st_as_sfc() %>% # convert bounding box to polygon
+    sf::st_centroid() %>% # get the centroid of the polygon
+    sf::st_as_sf() %>% # store as simple feature
+    sf::`st_crs<-`(4326)  # set the coordinate system to WGS84 (GPS etc.)
+  
+  city_coordinates %>% 
+    dplyr::mutate(name_of_city = city_name) %>% # add input city name in a column
+    dplyr::rename(geometry = x) %>% # Rename the coordinate column
+    dplyr::relocate(name_of_city, geometry) %>% # reorder the columns
+    return()
+}
+#######################################################
+
+for(i in 1:nrow(cities)){
+  print(paste0(i," ", as.character(cities[i,"City"])))
+  city <- city_coords_from_op_str_map(as.character(cities[i,"City"]))
+  if(i == 1){
+    cities_of_interest <- city
+  } else {
+    cities_of_interest <- bind_rows(cities_of_interest, city)
+  }
+}
+
+geocities <- cities_of_interest |>
+  rename(City = name_of_city) |>
+  left_join(cities) |>
+  st_as_sf() 
+
+st_crs(geocities) <- st_crs(4326)
+geocities <- geocities |>
+   st_transform("ESRI:54024")
+world <- world |>
+  st_transform("ESRI:54024")
+
+ggplot() +
+  geom_sf(data = world, fill = alpha("black", 0.3), colour = NA) +
+  geom_sf(data = geocities, colour = alpha("white", 0.5),
+          aes(size=GNC_rel)) +
+  geom_sf_label_repel(data=geocities[geocities$GNC_rel > 55,], aes(label=City),
+                      color = "white",     # text color
+                      fill = alpha("black", 0.6),
+                      family="Fira Code",
+                    size = 2)         +
+  theme_minimal() +
+  ggtitle("15 November: FIRE.\nFinance, Insurance, Real Estate and other advanced\nservices as markers of urban globalisation") +
+  labs(
+    x = "#30DayMapChallenge. Clémentine Cottineau-Mugadza, 2025.\nSource: B. Derudder and P.J. Taylor, 2020 | GaWC data 31",
+    y = "",
+    size = "Relative index of\nconnectivity (%)"
+  ) +
+  theme(plot.background = element_rect(fill = alpha("#d0312d", 0.5),colour = "white"),
+        axis.title.x=element_text(family="Fira Code", hjust = 0, size=8,colour = "white"),
+        plot.title = element_text(face = "bold", family="Fira Code", size=11, colour = "white"),
+        axis.line =  element_blank(),
+        axis.text =  element_blank(),
+        legend.title=element_text(family="Fira Code", hjust = 0, size=9,colour = "white"),
+        legend.text=element_text(family="Fira Code", hjust = 0, size=8,colour = "white"),
+        legend.position = "inside",
+        legend.position.inside = c(0.99, .01),
+        legend.justification = "bottom",
+        legend.box.just = "right",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        plot.margin=unit(c(1,25,1,1), "mm"))
+
+
+grid.raster(rbanism_logo,
+            x = 0.77, y=0.1,
+            width = unit(55, "points"))
