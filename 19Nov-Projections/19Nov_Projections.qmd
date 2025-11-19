@@ -1,0 +1,19 @@
+---
+title: "19Nov_Projections_Description"
+author: "Soroush"
+format: html
+editor: visual
+---
+
+# 19 November - Projections : World Continents UTM Vs. Equal-Area (LAEA) Projection
+
+## Content of the map
+
+The map compares the two different projections of [Universal Transverse Mercator](https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system) (UTM) as the most well-known map of the world versus the [Lambert Azimuthal Equal-Area](https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection) (LAEA) projection of continents centered on Africa which represents a projection of world continents closer to their real-world sizes as the UTM projection, has a large distortion on off-center regions on the globe.
+
+## References
+
+-   World Continents Shapefile from [ArcGIS Hub](https://hub.arcgis.com/datasets/CESJ::world-continents/explore)
+
+## Process
+The data from ArcGIS Hub was used to represent the world continents. The main step was to set the CRS for for the same layer. The approximate central Longtitude (10) and Latitude (30) of Africa were set as the origin point of projection before setting the UTM projection with EPSG : 3857. The next step was to set the points on polygon to label the continents. At last, the plotting configurations inclduing the layer colors, labels, axis and plot background were done.
