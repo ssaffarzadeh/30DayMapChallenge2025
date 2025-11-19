@@ -1,12 +1,11 @@
 # install.packages("ggplot2")
 # install.packages("magick")
 # install.packages("ggrepel")
-# install.packages("png")
 # install.packages("grid")
 # install.packages("sf")
 # install.packages("patchwork")
 
-library(png)
+
 library(sf)
 library(ggplot2)
 library(magick)
@@ -15,6 +14,7 @@ library(ggrepel)
 library(patchwork)
 
 sf::sf_use_s2(FALSE)   #Avoiding geometry issues
+
 
 #Load world map
 
@@ -69,9 +69,8 @@ p2 <- ggplot(af_eu_as_laea) +
 
 
 #Read logo
-logo <- image_read("Logo_Rbanism_ Blue.png")
-logo_rgba <- as.raster(logo)
-logo_grob <- rasterGrob(logo_rgba, interpolate = TRUE)
+rbanism_logo <- image_read("Logo_Rbanism_ White.png")
+
 
 #Combined plot and caption 
 final_plot <- (p1 | p2) +
@@ -85,15 +84,18 @@ final_plot <- (p1 | p2) +
 
 #Add logo and plot
 final_plot_with_logo <- final_plot +
-  inset_element(
-    logo_grob,
-    left = 0.82,
-    bottom = 0.03,
-    right = 0.98,
-    top = 0.25
-  )
-
+  grid.raster(rbanism_logo,
+            x = 0.88, y=0.23,
+            width = unit(45, "points"))
+  
 final_plot_with_logo
+
+
+
+
+
+
+
 
 
 
