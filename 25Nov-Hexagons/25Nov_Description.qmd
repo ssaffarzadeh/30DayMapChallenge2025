@@ -4,3 +4,7 @@ format: html
 author: Soroush
 ---
 
+library(sf)
+library(ggplot2)
+library(magick)
+library(grid)
