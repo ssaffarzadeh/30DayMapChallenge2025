@@ -6,10 +6,10 @@
 # install.packages("patchwork")
 
 # Define the packages to be used
-packages <- c("ggplot2", "sf", "magick", "grid", "ggrepel", "patchwork", "here")
-
-# Load the packages
-load_packages(packages)
+# packages <- c("ggplot2", "sf", "magick", "grid", "ggrepel", "patchwork", "here")
+# 
+# # Load the packages
+# load_packages(packages)
 
 library(sf)
 library(ggplot2)
@@ -58,7 +58,7 @@ p1 <- ggplot(af_eu_as_merc) +
         axis.text = element_text(color = "white"),            
         axis.title = element_blank(),       
         plot.title = element_text(color = "white")) +
-  ggtitle("11 Nov: World Continents Mercator Projection Vs. Equal-Area Projection (LAEA)") +
+  ggtitle("19 Nov: World Continents Mercator Projection Vs. Equal-Area Projection (LAEA)") +
   theme(theme(plot.title = element_text(hjust = 0.5)))
 
 p2 <- ggplot(af_eu_as_laea) +
@@ -77,7 +77,7 @@ p2 <- ggplot(af_eu_as_laea) +
 
 
 #Read logo
-rbanism_logo <- image_read("Logo_Rbanism_ White.png")
+rbanism_logo <- image_read("logos/Logo transparent background/Logo_Rbanism_ White.png")
 
 
 #Combined plot and caption 
@@ -89,17 +89,13 @@ final_plot <- (p1 | p2) +
       plot.background = element_rect(fill = "grey10", color = NA)
     )
   )
+
+
+final_plot
 grid.raster(rbanism_logo,
-            x = 0.88, y=0.23,
+            x = 0.89, y=0.20,
             width = unit(45, "points"))
 
-#Add logo and plot
-# final_plot_with_logo <- final_plot +
-#   grid.raster(rbanism_logo,
-#             x = 0.88, y=0.23,
-#             width = unit(45, "points"))
-  
-# final_plot_with_logo
 
 
 
