@@ -5,6 +5,11 @@
 # install.packages("sf")
 # install.packages("patchwork")
 
+# Define the packages to be used
+packages <- c("ggplot2", "sf", "magick", "grid", "ggrepel", "patchwork", "here")
+
+# Load the packages
+load_packages(packages)
 
 library(sf)
 library(ggplot2)
@@ -13,14 +18,17 @@ library(grid)
 library(ggrepel)
 library(patchwork)
 
+
+
 sf::sf_use_s2(FALSE)   #Avoiding geometry issues
 
 
 #Load world map
 
-af_eu_as <- st_read("World_Continents.shp", quiet = TRUE)
+af_eu_as <- st_read("data/World_Continents.shp")
 
 #For labeling the points
+
 label_points <- st_point_on_surface(af_eu_as)
 
 #Setting coord points for plotting labels
@@ -81,14 +89,17 @@ final_plot <- (p1 | p2) +
       plot.background = element_rect(fill = "grey10", color = NA)
     )
   )
-
-#Add logo and plot
-final_plot_with_logo <- final_plot +
-  grid.raster(rbanism_logo,
+grid.raster(rbanism_logo,
             x = 0.88, y=0.23,
             width = unit(45, "points"))
+
+#Add logo and plot
+# final_plot_with_logo <- final_plot +
+#   grid.raster(rbanism_logo,
+#             x = 0.88, y=0.23,
+#             width = unit(45, "points"))
   
-final_plot_with_logo
+# final_plot_with_logo
 
 
 
